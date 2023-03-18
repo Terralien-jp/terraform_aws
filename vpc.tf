@@ -4,7 +4,7 @@
 resource "aws_vpc" "this" {
   cidr_block = "10.0.0.0/16"
   tags = {
-    Name = "${local.environment}-${local.app_name}-vpc"
+    Name = "${local.app_name}-${local.environment}-vpc"
   }
 }
 
@@ -15,7 +15,7 @@ resource "aws_vpc" "this" {
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
   tags = {
-    Name = "${local.environment}-${local.app_name}-igw"
+    Name = "${local.app_name}-${local.environment}-igw"
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_subnet" "public_1a" {
   cidr_block        = "10.0.1.0/24"
   availability_zone = "ap-northeast-1a"
   tags = {
-    Name = "${local.environment}-${local.app_name}-public-1a"
+    Name = "${local.app_name}-${local.environment}-public-1a"
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_subnet" "public_1c" {
   cidr_block        = "10.0.2.0/24"
   availability_zone = "ap-northeast-1c"
   tags = {
-    Name = "${local.environment}-${local.app_name}-public-1c"
+    Name = "${local.app_name}-${local.environment}-public-1c"
   }
 }
 
@@ -46,7 +46,7 @@ resource "aws_subnet" "public_1d" {
   cidr_block        = "10.0.3.0/24"
   availability_zone = "ap-northeast-1d"
   tags = {
-    Name = "${local.environment}-${local.app_name}-public-1d"
+    Name = "${local.app_name}-${local.environment}-public-1d"
   }
 }
 
@@ -60,7 +60,7 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.this.id
   }
   tags = {
-    Name = "${local.environment}-${local.app_name}-public"
+    Name = "${local.app_name}-${local.environment}-public"
   }
 }
 
@@ -92,7 +92,7 @@ resource "aws_subnet" "private_1a" {
   cidr_block        = "10.0.10.0/24"
   availability_zone = "ap-northeast-1a"
   tags = {
-    Name = "${local.environment}-${local.app_name}-private-1a"
+    Name = "${local.app_name}-${local.environment}-private-1a"
   }
 }
 
@@ -101,7 +101,7 @@ resource "aws_subnet" "private_1c" {
   cidr_block        = "10.0.20.0/24"
   availability_zone = "ap-northeast-1c"
   tags = {
-    Name = "${local.environment}-${local.app_name}-private-1c"
+    Name = "${local.app_name}-${local.environment}-private-1c"
   }
 }
 
@@ -110,7 +110,7 @@ resource "aws_subnet" "private_1d" {
   cidr_block        = "10.0.30.0/24"
   availability_zone = "ap-northeast-1d"
   tags = {
-    Name = "${local.environment}-${local.app_name}-private-1d"
+    Name = "${local.app_name}-${local.environment}-private-1d"
   }
 }
 
