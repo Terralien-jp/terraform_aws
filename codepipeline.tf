@@ -11,11 +11,11 @@ resource "aws_codepipeline" "this" {
     name = "Source"
 
     action {
-      name             = "SourceActionName"
-      category         = "Source"
-      owner            = "AWS"
-      provider         = "CodeCommit"
-      version          = "1"
+      name     = "SourceActionName"
+      category = "Source"
+      owner    = "AWS"
+      provider = "CodeCommit"
+      version  = "1"
 
       configuration = {
         RepositoryName = aws_codecommit_repository.this.name
@@ -57,10 +57,10 @@ resource "aws_codepipeline" "this" {
       input_artifacts = ["BuildOutput"]
 
       configuration = {
-        ClusterName   = "example-cluster-name"
-        Namespace     = "example-namespace"
-        OutputAMIs    = ""
-        OutputImages  = ""
+        ClusterName     = "example-cluster-name"
+        Namespace       = "example-namespace"
+        OutputAMIs      = ""
+        OutputImages    = ""
         OutputVariables = ""
       }
     }

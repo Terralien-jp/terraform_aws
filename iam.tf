@@ -5,7 +5,7 @@ resource "aws_iam_role" "codepipeline" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect    = "Allow"
+        Effect = "Allow"
         Principal = {
           Service = "codepipeline.amazonaws.com"
         }
@@ -78,13 +78,13 @@ resource "aws_iam_policy" "codebuild" {
     Version = "2012-10-17",
     Statement = [
       {
-        Effect    = "Allow",
-        Action    = [
+        Effect = "Allow",
+        Action = [
           "s3:GetObject",
           "s3:PutObject",
           "s3:ListBucket"
         ],
-        Resource  = [
+        Resource = [
           "${aws_s3_bucket.example.arn}",
           "${aws_s3_bucket.example.arn}/*"
         ]
