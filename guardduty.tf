@@ -52,19 +52,37 @@ resource "aws_sns_topic_subscription" "guardduty_sns_topic_subscription" {
   endpoint  = "<email-address>"
 }
 
-resource "aws_guardduty_publishing_destination" "guardduty_publishing_destination" {
-  detector_id         = aws_guardduty_detector.guardduty_detector.id
-  destination_type    = "S3"
-  destination_id      = "<s3-bucket-arn>"
-  access_role_arn     = "<iam-role-arn>"
-  kms_key_arn         = "<kms-key-arn>"
-  publishing_frequency = "FIFTEEN_MINUTES"
+resource "aws_sns_topic_subscription" "guardduty_sns_subscription" {
+  topic_arn = aws_sns_topic.guardduty_notifications.arn
+  protocol  = "email"
+  endpoint  = "your-email@example.com"
 }
 
-resource "aws_guardduty_notification" "guardduty_notification" {
-  name                = "MyGuardDutyNotification"
-  destination_arn     = aws_sns_topic.guardduty_notifications.arn
-  event_type          = "All"
-  format              = "JSON"
-  enabled             = true
+resource "aws_guardduty_filter" "high_severity_filter" {
+  name          = "HighSeverityFilter"
+  detector_id   = aws_guardduty_detector.detector.id
+  description   = "Filter for high severity findings"
+  rank          = 1
+  finding_criteria {
+    criterion {
+      field ="severity"
+      greater_than_or_equal = "7"
+    }
+  }
+}
+
+resource "aws_guardduty_publishing_destination" "sns_destination" {
+  destination_type   = "sns"
+  security_group_ids = [aws_security_group.publishing_destination_sg.id]
+  sns_destination {
+    topic_arn = aws_sns_topic.guardduty_notifications.arn
+  }
+}
+
+resource "aws_guardduty_configuration" "guardduty_configuration" {
+  detector_id = aws_guardduty_detector.detector.id
+  publishing_destination {
+    destination_id = aws_guardduty_publishing_destination.sns_destination.id
+    destination_type = aws_guardduty_publishing_destination.sns_destination.destination_type
+  }
 }
