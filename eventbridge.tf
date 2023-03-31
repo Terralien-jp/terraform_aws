@@ -10,8 +10,23 @@ resource "aws_cloudwatch_event_rule" "guardduty_events_rule" {
   })
 }
 
-resource "aws_cloudwatch_event_target" "guardduty_events_target" {
-  rule      = aws_cloudwatch_event_rule.guardduty_events_rule.name
-  target_id = "GuardDutySNSTarget"
-  arn       = aws_sns_topic.guardduty_notifications.arn
+resource "aws_cloudwatch_event_target" "example" {
+  rule      = aws_cloudwatch_event_rule.example.name
+  target_id = "example-target-id"
+  arn       = aws_lambda_function.example.arn
+
+  input_transformer {
+    input_paths = {
+      instance = "$.detail.instance"
+      state    = "$.detail.state"
+    }
+
+    input_template = <<EOT
+{
+  "instance": <instance>,
+  "state": <state>,
+  "timestamp": "${timestamp()}"
+}
+EOT
+  }
 }
