@@ -111,3 +111,53 @@ data "aws_iam_policy_document" "codebuild" {
     }
   }
 }
+
+# ec2 cloudwatch
+
+resource "aws_iam_role" "role" {
+  name = "ec2_cloudwatch_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "policy" {
+  name = "ec2_cloudwatch_policy"
+  role = aws_iam_role.role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_instance_profile" "instance_profile" {
+  name = "ec2_cloudwatch_profile"
+  role = aws_iam_role.role.name
+}
